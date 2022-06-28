@@ -152,7 +152,7 @@ function depth_first_traversal(graph, s) {
             c++;
         }
         if (c > 10000) {
-            console.log("Graph was cyclic, or has too many edges.");
+            window.alert("Graph was cyclic, or has too many edges.");
             break;
         }
     }
