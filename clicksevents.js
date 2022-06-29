@@ -24,15 +24,24 @@ window.addEventListener("click", function() {
     }
 
     if (clickednode.length == 2) {
+        var two_way_edge = false;
         for (let i in clickednode) {
             clickednode[i].color = foregroundColor;
         }
         var pathexists = false;
         for (let i in edgelist) {
             edge = edgelist[i];
-            if ((edge.to == clickednode[0] && edge.from == clickednode[1]) || (edge.to == clickednode[1] && edge.from == clickednode[0])) {
+            if (edge.to == clickednode[0] && edge.from == clickednode[1]) {
+                two_way_edge = true; //graphical only
+            }
+            if (edge.to == clickednode[1] && edge.from == clickednode[0]) {
                 pathexists = true;
                 edgelist.splice(i, 1);
+
+                let t = graph[edge.from.value];
+                graph[edge.from.value].splice(t.indexOf(edge.to.value), 1);
+
+
                 break;
             }
         }
@@ -40,7 +49,10 @@ window.addEventListener("click", function() {
             var w = this.prompt("Enter Edge Weight (Note that this may not be used for some algorithms)");
 
             if (w != parseInt(w, 10)) { w = 0; }
-            edgelist.push(new Edge(clickednode[0], clickednode[1], w));
+            let edge_to_add = new Edge(clickednode[0], clickednode[1], w)
+            if (two_way_edge == true) { edge_to_add.two_way = true; }
+            edgelist.push(edge_to_add);
+
             graph[clickednode[0].value].push(clickednode[1].value);
         }
         clickednode = [];

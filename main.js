@@ -31,6 +31,18 @@ function openTab(evt, tabname) {
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(tabname).style.display = "block";
     evt.currentTarget.className += " active";
+
+    if (tabname == "Algorithm") {
+        s = ""
+        for (let node of nodelist) {
+            console.log(node)
+            s += "<option class=\"sel\" value=\"" + String(node.value) + "\">" + String(node.value) + "</option>";
+        }
+        console.log(s);
+        document.getElementById("startnodeselect").innerHTML = s;
+        console.log(s);
+        document.getElementById("endnodeselect").innerHTML = s;
+    }
 }
 
 function sleep(milliseconds) {
@@ -91,12 +103,11 @@ function adjlist_to_node_objects(g) {
 }
 
 var graph = {
-    "A": ["B", "C"],
-    "B": ["F"],
-    "C": ["D", "E"],
-    "D": [],
+    "A": ["B"],
+    "B": ["C"],
+    "C": [],
+    "D": ["E"],
     "E": [],
-    "F": [],
 }
 
 var graph_objects = adjlist_to_node_objects(graph);
@@ -109,6 +120,7 @@ ri = 0;
 
 function draw() {
     console.log("Drawing");
+
     window.requestAnimationFrame(draw);
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = '#FFFFFF';
@@ -123,40 +135,21 @@ function draw() {
         node.draw();
     }
     if (result.length > 0) {
-        ri++;
-        console.log(ri, result != []);
-        sleep(1000);
-        for (let n in nodelist) {
-            node = nodelist[n];
-            if (node.value == result[ri]) {
-                node.color = "#ff0000";
+        resultant = result.shift();
+        if (resultant != "DONE") {
+            for (let n of nodelist) {
+                if (n.value == resultant) {
+                    n.color = "#ff0000";
+                    console.log(n);
+                }
             }
         }
+        sleep(500);
     }
 }
 
 var selected_node = false;
 var clickednode = [];
 
-
-//depth first trbaversal
-function depth_first_traversal(graph, s) {
-    var c = 0;
-    var stack = [s];
-    var final_stack = [];
-    while (stack.length > 0) {
-        var current = stack.pop();
-        final_stack.push(current);
-        for (let neighbour of graph[current]) {
-            stack.push(neighbour)
-            c++;
-        }
-        if (c > 10000) {
-            window.alert("Graph was cyclic, or has too many edges.");
-            break;
-        }
-    }
-    return final_stack;
-}
 
 draw();

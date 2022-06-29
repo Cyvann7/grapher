@@ -48,6 +48,23 @@ p {
 .tabcontent {
     display: none;
     padding: 6px 12px;
-    border: 3px solid #543275;
+    border: 3px solid #241930;
     border-top: none;
+}
+
+select {
+    cursor: pointer;
+    padding: 6px 12px;
+    border: 3px solid #241930;
+    border-top: none;
+    background-color: #241930;
+    color: #e0e0e0;
+    font-size: 20px;
+    font-family: 'Recursive', sans-serif;
+}
+
+nobr {
+    color: #e0e0e0;
+    font-size: 20px;
+    font-family: 'Recursive', sans-serif;
 }

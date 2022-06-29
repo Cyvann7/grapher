@@ -55,10 +55,34 @@ window.addEventListener("keypress", function() {
     }
 
     if (key == "b") {
+        let start = document.getElementById("startnodeselect");
+        let value = start.value;
+        console.log("SELECTED: ", value);
+        for (let node of nodelist) {
+            if (node.value == value) {
+                clickednode[0] = node;
+                break;
+            }
+        }
         console.log(clickednode[0]);
         clickednode[0].color = "red";
         console.log(graph)
-        result = depth_first_traversal(graph, clickednode[0].value);
+
+        var algorithm_dropdown = document.getElementById("algoselectdrop");
+        var algorithm_to_use = algorithm_dropdown.value
+        if (algorithm_to_use == "DFS") {
+            result = depth_first_traversal(graph, clickednode[0].value);
+        } else if (algorithm_to_use == "BFS") {
+            result = breadth_first_traversal(graph, clickednode[0].value);
+        };
+        clickednode = [];
+    }
+
+    if (key == "r") {
+        for (let node of nodelist) {
+            node.color = foregroundColor;
+        }
+        selected_node = false;
         clickednode = [];
     }
 })

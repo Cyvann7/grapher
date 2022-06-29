@@ -30,17 +30,23 @@ class Edge {
         this.from = from;
         this.to = to;
         this.weight = weight;
+        this.two_way = false;
     }
 
     draw() {
 
         var grad = ctx.createLinearGradient(this.from.x, this.from.y, this.to.x, this.to.y);
+        if (this.two_way == false) {
+            grad.addColorStop(0, "#e0e0e0");
 
-        grad.addColorStop(0, "#e0e0e0");
-
-        grad.addColorStop(0.65, "#e0e0e0");
-        grad.addColorStop(0.66, "#ed4ef2");
-
+            grad.addColorStop(0.65, "#e0e0e0");
+            grad.addColorStop(0.66, "#ed4ef2");
+        } else {
+            grad.addColorStop(0.2, "#ed4ef2");
+            grad.addColorStop(0.21, "#e0e0e0");
+            grad.addColorStop(0.79, "#e0e0e0");
+            grad.addColorStop(0.8, "#ed4ef2");
+        }
         ctx.strokeStyle = grad;
         ctx.lineWidth = 5;
         ctx.beginPath();
