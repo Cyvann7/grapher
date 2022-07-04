@@ -35,6 +35,7 @@
             <li>All edges are directed by default, going from white to pink.</li>
             <li>Create an undirected edge by making an edge both ways</li>
             <li>Remove an edge by going back over it</li>
+            <li>Note that when adding an undirected edge, you need to manually set them to both have the same edge-weight.</li>
         </ul>
     </div>
 
@@ -43,6 +44,7 @@
         <select name="algorithm" id="algoselectdrop">
 			<option class="sel" value="DFS">Depth First Search</option>
 			<option class="sel" value="BFS">Breadth First Search</option>
+			<option class="sel" value="DJI">Djikstra's Shortest Path</option>
 		</select>
         <br><br>
         <div display="flex" style="align-items: center;">

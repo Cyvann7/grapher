@@ -39,7 +39,7 @@ window.addEventListener("click", function() {
                 edgelist.splice(i, 1);
 
                 let t = graph[edge.from.value];
-                graph[edge.from.value].splice(t.indexOf(edge.to.value), 1);
+                graph[edge.from.value].splice(t.indexOf([edge.to.value, edge.weight]), 1);
 
 
                 break;
@@ -48,12 +48,13 @@ window.addEventListener("click", function() {
         if (!pathexists) { //! Create New Edge
             var w = this.prompt("Enter Edge Weight (Note that this may not be used for some algorithms)");
 
+
             if (w != parseInt(w, 10)) { w = 0; }
             let edge_to_add = new Edge(clickednode[0], clickednode[1], w)
             if (two_way_edge == true) { edge_to_add.two_way = true; }
             edgelist.push(edge_to_add);
 
-            graph[clickednode[0].value].push(clickednode[1].value);
+            graph[clickednode[0].value].push([clickednode[1].value, w]);
         }
         clickednode = [];
     }

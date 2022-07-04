@@ -35,12 +35,9 @@ function openTab(evt, tabname) {
     if (tabname == "Algorithm") {
         s = ""
         for (let node of nodelist) {
-            console.log(node)
             s += "<option class=\"sel\" value=\"" + String(node.value) + "\">" + String(node.value) + "</option>";
         }
-        console.log(s);
         document.getElementById("startnodeselect").innerHTML = s;
-        console.log(s);
         document.getElementById("endnodeselect").innerHTML = s;
     }
 }
@@ -57,17 +54,12 @@ function sleep(milliseconds) {
 ctx.fillStyle = backgroundColor;
 ctx.fillRect(0, 0, width, height);
 
-var node1 = new Node(80, 100, "A");
-var node2 = new Node(160, 200, "B");
-var edge1 = new Edge(node1, node2, 0);
-var back = false;
-var back2 = true;
-
 function adjlist_to_node_objects(g) {
     var nodelist = [];
     var edgelist = [];
     var nodeposx = 50;
     var nodeposy = 50;
+    //make nodes
     for (var node in g) {
         nodelist.push(new Node(nodeposx, nodeposy, node, g[node]));
         nodeposx += 100;
@@ -78,12 +70,16 @@ function adjlist_to_node_objects(g) {
     }
     ("NODES:", nodelist);
 
+    //make edges
     for (var n in nodelist) {
         node = nodelist[n];
         for (var ne in node.neighbours) {
-            neighbour = node.neighbours[ne];
+
+            neighbour = node.neighbours[ne][0]; //node value
             var from = node;
             var to;
+
+            //linear search for to node
             for (var ni in nodelist) {
                 if (nodelist[ni].value == neighbour) {
                     to = nodelist[ni];
@@ -91,7 +87,7 @@ function adjlist_to_node_objects(g) {
                 }
             }
 
-            var weight = 0;
+            var weight = neighbour = node.neighbours[ne][1];
             var edge = new Edge(from, to, weight)
 
             edgelist.push(edge);
@@ -102,30 +98,46 @@ function adjlist_to_node_objects(g) {
     return [nodelist, edgelist];
 }
 
+//adj list to represent graph
 var graph = {
-    "A": ["B"],
-    "B": ["C"],
-    "C": [],
-    "D": ["E"],
+    "A": [
+        ["B", 3],
+        ["C", 1],
+    ],
+    "B": [
+        ["A", 3],
+        ["C", 7],
+        ["D", 5],
+        ["E", 1],
+    ],
+    "C": [
+        ["A", 1],
+        ["B", 7],
+        ["D", 2],
+    ],
+    "D": [
+        ["B", 5],
+        ["C", 2],
+        ["E", 7],
+    ],
     "E": [],
 }
 
-var graph_objects = adjlist_to_node_objects(graph);
-var nodelist = graph_objects[0];
-var edgelist = graph_objects[1];
-("Starting Draw");
+var [nodelist, edgelist] = graph_objects = adjlist_to_node_objects(graph);
 
-result = []
+result = [];
+result_path = [];
 ri = 0;
 
+
 function draw() {
-    console.log("Drawing");
 
     window.requestAnimationFrame(draw);
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = '#FFFFFF';
     ctx.font = '3vw Recursive, sans-serif';
 
+    //Draw all the nodes
     for (let e in edgelist) {
         edge = edgelist[e];
         edge.draw();
@@ -134,13 +146,27 @@ function draw() {
         node = nodelist[n];
         node.draw();
     }
+
+    //draw the traversal
     if (result.length > 0) {
-        resultant = result.shift();
+        resultant = result.shift(); //pop front
         if (resultant != "DONE") {
             for (let n of nodelist) {
                 if (n.value == resultant) {
                     n.color = "#ff0000";
-                    console.log(n);
+                }
+            }
+        }
+        sleep(500);
+    }
+
+    //Once finsished drawing the traversal, draw the path (if there is one)
+    if (result.length == 0 && result_path.length > 0) {
+        resultant = result_path.shift(); //pop front
+        if (resultant != "DONE") {
+            for (let n of nodelist) {
+                if (n.value == resultant) {
+                    n.color = "#00ff00";
                 }
             }
         }

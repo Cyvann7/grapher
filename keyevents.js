@@ -41,10 +41,7 @@ window.addEventListener("keypress", function() {
 
         for (n in graph) {
             var index = graph[n].indexOf(clickednode[0].value);
-
             if (index > -1) {
-                console.log(index, graph[n]);
-
                 graph[n].splice(index, 1);
             }
         }
@@ -56,25 +53,35 @@ window.addEventListener("keypress", function() {
 
     if (key == "b") {
         let start = document.getElementById("startnodeselect");
-        let value = start.value;
-        console.log("SELECTED: ", value);
+        let end = document.getElementById("endnodeselect");
+        let start_value = start.value;
+        let end_value = end.value;
+
         for (let node of nodelist) {
-            if (node.value == value) {
+            if (node.value == start_value) {
                 clickednode[0] = node;
                 break;
             }
         }
-        console.log(clickednode[0]);
+
+        for (let node of nodelist) {
+            if (node.value == end_value) {
+                clickednode[1] = node;
+                break;
+            }
+        }
         clickednode[0].color = "red";
-        console.log(graph)
 
         var algorithm_dropdown = document.getElementById("algoselectdrop");
         var algorithm_to_use = algorithm_dropdown.value
-        if (algorithm_to_use == "DFS") {
-            result = depth_first_traversal(graph, clickednode[0].value);
-        } else if (algorithm_to_use == "BFS") {
-            result = breadth_first_traversal(graph, clickednode[0].value);
-        };
+        switch (algorithm_to_use) {
+            case "DFS":
+                result = depth_first_traversal(graph, start_value);
+            case "BFS":
+                result = breadth_first_traversal(graph, start_value);
+            case "DJI":
+                [result, result_path] = djisktras_shortest_path(graph, start_value, end_value);
+        }
         clickednode = [];
     }
 
